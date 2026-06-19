@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AŔMA Management Studio | Admin Control</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --slate-dark: #2a3744; --slate-medium: #3a4b5c; --light: #f4f6f8; }
+        body { font-family: system-ui, sans-serif; margin: 0; background: var(--light); padding: 40px; }
+        .admin-container { max-width: 1000px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        h1 { color: var(--slate-dark); border-bottom: 3px solid var(--slate-medium); padding-bottom: 10px; display: flex; justify-content: space-between; }
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 30px; background: #eef2f5; padding: 20px; border-radius: 8px; }
+        input, select { padding: 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        button.add-btn { background: #10b981; color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; grid-column: span 2; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; }
+        th { background: var(--slate-dark); color: white; }
+        .delete-btn { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <h1><span><i class="fa-solid fa-screwdriver-wrench"></i> AŔMA Admin Inventory</span> <button onclick="window.location.href='/'" style="font-size:14px; cursor:pointer;">View Storefront</button></h1>
+    
+    <h3>Insert New E-Commerce Listing</h3>
+    <div class="form-grid">
+        <input type="text" id="prodTitle" placeholder="Product Title (e.g. Pashmina Scarf)">
+        <input type="text" id="prodPrice" placeholder="Price Matrix (e.g. 2500)">
+        <select id="prodCategory">
+            <option value="clothing">Traditional & Modern Clothing</option>
+            <option value="footwear">Footwear</option>
+            <option value="accessories">Accessories & Bags</option>
+            <option value="crafts">Nepalese Handicrafts</option>
+        </select>
+        <select id="prodIcon">
+            <option value="fa-shirt">Shirt/Hoodie Icon</option>
+            <option value="fa-boot">Boots/Shoes Icon</option>
+            <option value="fa-bag-shopping">Bag Icon</option>
+            <option value="fa-sweater">Sweater Icon</option>
+            <option value="fa-box">Default Box Icon</option>
+        </select>
+        <button class="add-btn" onclick="submitProduct()">Publish Item Dynamic Pipeline</button>
+    </div>
+
+    <h3>Active Database Items</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Category</th>
+                <th>Title Name</th>
+                <th>Retail Value</th>
+                <th>Operational Options</th>
+            </tr>
+        </thead>
+        <tbody id="adminTableBody"></tbody>
+    </table>
+</div>
+
+<script>
+    const BACKEND_URL = "https://arma-backend.onrender.com"; 
+
+    
+    async function loadAdminPanel() {
+       const res = await fetch(`${BACKEND_URL}/api/products`);
+        const data = await res.json();
+        const tbody = document.getElementById("adminTableBody");
+        tbody.innerHTML = "";
+        
+        data.forEach(p => {
+            tbody.innerHTML += `
+                <tr>
+                    <td>#${p.id}</td>
+                    <td><b style="text-transform:uppercase; font-size:11px;">${p.category}</b></td>
+                    <td>${p.title}</td>
+                    <td>${p.price}</td>
+                    <td><button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                </tr>`;
+        });
+    }
+
+    async function submitProduct() {
+        const title = document.getElementById("prodTitle").value;
+        const price = document.getElementById("prodPrice").value;
+        const category = document.getElementById("prodCategory").value;
+        const icon = document.getElementById("prodIcon").value;
+await fetch(`${BACKEND_URL}/api/products`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, price, category, icon })
+    });
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ title, price, category, icon })
+        });
+        
+        // Reset input fields
+        document.getElementById("prodTitle").value = '';
+        document.getElementById("prodPrice").value = '';
+        loadAdminPanel();
+    }
+
+    async function deleteProduct(id) {
+        if(confirm("Confirm removal parameters?")) {
+           await fetch(`${BACKEND_URL}/api/products/${id}`, { method: 'DELETE' });
+            loadAdminPanel();
+        }
+    }
+
+    window.onload = loadAdminPanel;
+</script>
+</body>
+</html>

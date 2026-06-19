@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AŔMA | Online Shopping Nepal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-metallic: #3a4b5c;
+            --bg-dark-metallic: #2a3744;
+            --logo-silver: #d1d5db;
+            --light-gray: #f4f6f8;
+            --text-dark: #1f2937;
+            --white: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--light-gray); color: var(--text-dark); }
+        .top-bar { background-color: var(--bg-dark-metallic); color: var(--logo-silver); font-size: 12px; padding: 5px 50px; display: flex; justify-content: space-between; align-items: center; }
+        .top-bar-links { display: flex; align-items: center; gap: 15px; }
+        .top-bar a { color: var(--logo-silver); text-decoration: none; transition: color 0.2s; }
+        .top-bar a:hover { color: var(--white); }
+        header { background-color: var(--bg-metallic); position: sticky; top: 0; z-index: 1000; padding: 15px 50px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .header-container { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
+        .logo-area img { height: 50px; width: auto; border-radius: 4px; }
+        .search-container { flex-grow: 1; display: flex; }
+        .search-container input { width: 100%; padding: 12px 15px; border: none; border-radius: 4px 0 0 4px; outline: none; }
+        .search-container button { background-color: var(--bg-dark-metallic); color: var(--white); border: none; padding: 0 25px; border-radius: 0 4px 4px 0; cursor: pointer; }
+        .header-actions { display: flex; align-items: center; gap: 25px; color: var(--white); }
+        .cart-icon { position: relative; cursor: pointer; font-size: 22px; }
+        .cart-count { position: absolute; top: -8px; right: -10px; background-color: #ef4444; color: white; font-size: 11px; padding: 2px 6px; border-radius: 50%; }
+        .hero-banner { background: linear-gradient(135deg, var(--bg-metallic), var(--bg-dark-metallic)); color: var(--white); text-align: center; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
+        .hero-banner img { height: 100px; margin-bottom: 15px; border-radius: 8px; }
+        .hero-banner h1 { font-size: 38px; letter-spacing: 3px; }
+        .production-line { font-size: 11px; color: var(--logo-silver); letter-spacing: 2px; margin-bottom: 15px; }
+        .main-container { max-width: 1200px; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 240px 1fr; gap: 30px; }
+        .sidebar { background-color: var(--white); padding: 20px; border-radius: 8px; height: fit-content; }
+        .sidebar h3 { margin-bottom: 15px; border-bottom: 2px solid var(--light-gray); padding-bottom: 8px; }
+        .sidebar ul { list-style: none; }
+        .sidebar ul li { padding: 10px 0; cursor: pointer; font-size: 14px; }
+        .sidebar ul li:hover { color: var(--bg-metallic); font-weight: 600; }
+        .products-section h2 { margin-bottom: 20px; font-size: 22px; position: relative; padding-bottom: 5px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .product-card { background-color: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .product-img { width: 100%; height: 200px; background-color: #eaeaea; display: flex; align-items: center; justify-content: center; color: #999; font-size: 40px; }
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .product-title { font-size: 15px; font-weight: 600; height: 40px; overflow: hidden; }
+        .product-price { font-size: 18px; font-weight: bold; color: var(--bg-dark-metallic); margin-bottom: 12px; }
+        .add-to-cart-btn { background-color: var(--bg-metallic); color: var(--white); border: none; padding: 10px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: 600; }
+        
+        /* Auth Modal Window Styles */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; width: 350px; position: relative; }
+        .modal-content h3 { margin-bottom: 15px; text-align: center; color: var(--bg-dark-metallic); }
+        .modal-content input, .modal-content select { width: 100%; padding: 10px; margin-bottom: 12px; border: 1px solid #ccc; border-radius: 4px; }
+        .modal-content button { width: 100%; padding: 10px; background: var(--bg-metallic); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+        .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px; }
+
+        footer { background-color: var(--bg-dark-metallic); color: var(--white); margin-top: 60px; padding: 40px 50px 20px; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <div class="top-bar">
+        <div>Welcome to AŔMA Online Shop!</div>
+        <div class="top-bar-links">
+            <a href="#">Become a Seller</a>
+            <a href="#">Customer Care</a>
+            <a href="#">Track My Order</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div class="logo-area"><h2 style="color:white; letter-spacing:2px;">AŔMA</h2></div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search in AŔMA...">
+                <button onclick="searchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </div>
+            <div class="header-actions">
+                <div onclick="openAuthModal()" style="cursor: pointer;"><i class="fa-regular fa-user"></i> <span id="authLabel">Login</span></div>
+                <div class="cart-icon" onclick="toggleCartAlert()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+            <h3 id="modalTitle">Account Gateway</h3>
+            <select id="loginRole">
+                <option value="user">Customer / Shopper</option>
+                <option value="admin">Store Administrator</option>
+            </select>
+            <input type="text" id="username" placeholder="Email Address (user@arma.com / admin@arma.com)">
+            <input type="password" id="password" placeholder="Password (user123 / admin123)">
+            <button onclick="executeAuthentication()">Authenticate</button>
+        </div>
+    </div>
+
+    <section class="hero-banner">
+        <h1>AŔMA</h1>
+        <div class="production-line">SAMIP KHATRI & SAMIP GANWALI PRODUCTION</div>
+        <p class="tagline">Premium Quality Goods — Made in Nepal</p>
+    </section>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h3>Categories</h3>
+            <ul>
+                <li onclick="filterCategory('all')">All Categories</li>
+                <li onclick="filterCategory('clothing')">Traditional & Modern Clothing</li>
+                <li onclick="filterCategory('footwear')">Footwear</li>
+                <li onclick="filterCategory('accessories')">Accessories & Bags</li>
+                <li onclick="filterCategory('crafts')">Nepalese Handicrafts</li>
+            </ul>
+        </aside>
+
+        <main class="products-section">
+            <h2 id="sectionTitle">Catalog Collection</h2>
+            <div class="products-grid" id="productsGrid"></div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 AŔMA Nepal. All Rights Reserved.
+    </footer>
+
+    <script>
+        // 1. ADD THIS LINE (Replace this URL with your actual Render URL later once you get it in Step 2)
+    const BACKEND_URL = "https://arma-backend.onrender.com"; 
+
+    let fullProductsDatabase = [];
+    let cartItemsCount = 0;
+       
+
+       // FIND THIS FUNCTION:
+    async function fetchProductsFromBackend() {
+        try {
+            // CHANGE THIS LINE:
+            // const response = await fetch('/api/products');
+            
+            // TO THIS LINE:
+            const response = await fetch(`${BACKEND_URL}/api/products`);
+            
+            fullProductsDatabase = await response.json();
+            displayProducts(fullProductsDatabase);
+        } catch (error) {
+            console.error("Backend offline.", error);
+        }
+    }
+
+        function displayProducts(productsArray) {
+            const grid = document.getElementById("productsGrid");
+            grid.innerHTML = ""; 
+            if(productsArray.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; padding: 40px;">No matching items context found.</p>`;
+                return;
+            }
+            productsArray.forEach(product => {
+                grid.innerHTML += `
+                    <div class="product-card">
+                        <div class="product-img"><i class="fa-solid ${product.icon || 'fa-box'}"></i></div>
+                        <div class="product-info">
+                            <div>
+                                <div class="product-title">${product.title}</div>
+                                <div class="product-price">${product.price}</div>
+                            </div>
+                            <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function addToCart(productId) {
+            cartItemsCount++;
+            document.getElementById("cartCount").innerText = cartItemsCount;
+            const item = fullProductsDatabase.find(p => p.id === productId);
+            alert(`"${item.title}" successfully allocated to customer profile checkout.`);
+        }
+
+        function filterCategory(categoryName) {
+            if (categoryName === 'all') {
+                document.getElementById("sectionTitle").innerText = "Catalog Collection";
+                displayProducts(fullProductsDatabase);
+            } else {
+                const filtered = fullProductsDatabase.filter(p => p.category === categoryName);
+                document.getElementById("sectionTitle").innerText = categoryName.toUpperCase() + " Segment";
+                displayProducts(filtered);
+            }
+        }
+
+        function searchProducts() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = fullProductsDatabase.filter(p => p.title.toLowerCase().includes(query));
+            displayProducts(filtered);
+        }
+
+        function toggleCartAlert() { alert(`Cart details ready processing checkout context queue.`); }
+        
+        // Modal Logic Actions
+        function openAuthModal() { document.getElementById("authModal").style.display = "flex"; }
+        function closeAuthModal() { document.getElementById("authModal").style.display = "none"; }
+
+        // FIND THIS FUNCTION:
+    async function executeAuthentication() {
+        const role = document.getElementById("loginRole").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // CHANGE THIS LINE:
+        // const response = await fetch('/api/login', {
+        
+        // TO THIS LINE:
+        const response = await fetch(`${BACKEND_URL}/api/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password, role })
+        });
+
+        const result = await response.json();
+        if(result.success) {
+            alert("Authorization complete successfully!");
+            
+            // CHANGE THIS LINE (Tells the browser how to find admin.html on GitHub):
+            // window.location.href = result.redirect; 
+            
+            // TO THIS LINE:
+            window.location.href = role === 'admin' ? 'admin.html' : 'index.html'; 
+        } else {
+            alert(result.message);
+        }
+    }
+
+        window.onload = fetchProductsFromBackend;
+    </script>
+</body>
+</html>
