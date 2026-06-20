@@ -61,53 +61,95 @@
 <script>
     const BACKEND_URL = "https://arma-backend.onrender.com"; 
 
-    
+    // Function to fetch database items and display them in the table
     async function loadAdminPanel() {
-       const res = await fetch(`${BACKEND_URL}/api/products`);
-        const data = await res.json();
-        const tbody = document.getElementById("adminTableBody");
-        tbody.innerHTML = "";
-        
-        data.forEach(p => {
-            tbody.innerHTML += `
-                <tr>
-                    <td>#${p.id}</td>
-                    <td><b style="text-transform:uppercase; font-size:11px;">${p.category}</b></td>
-                    <td>${p.title}</td>
-                    <td>${p.price}</td>
-                    <td><button class="delete-btn" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i> Delete</button></td>
-                </tr>`;
-        });
-    }
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/products`);
+            if (!res.ok) throw new Error("Could not fetch data");
+            
+            const data = await res.json();
+            const tbody = document.getElementById("adminTableBody");
+            tbody.innerHTML = "";
+            
+            if (data.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#999;">No products currently active in your cloud database vault.</td></tr>`;
+                return;
+            }
 
-    async function submitProduct() {
-        const title = document.getElementById("prodTitle").value;
-        const price = document.getElementById("prodPrice").value;
-        const category = document.getElementById("prodCategory").value;
-        const icon = document.getElementById("prodIcon").value;
-fetch(`${BACKEND_URL}/api/products`, { ... })
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, price, category, icon })
-    });
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, price, category, icon })
-        });
-        
-        // Reset input fields
-        document.getElementById("prodTitle").value = '';
-        document.getElementById("prodPrice").value = '';
-        loadAdminPanel();
-    }
-
-    async function deleteProduct(id) {
-        if(confirm("Confirm removal parameters?")) {
-           await fetch(`${BACKEND_URL}/api/products/${id}`, { method: 'DELETE' });
-            loadAdminPanel();
+            data.forEach(p => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>#${p.id || p._id}</td>
+                        <td><b style="text-transform:uppercase; font-size:11px;">${p.category}</b></td>
+                        <td>${p.title}</td>
+                        <td>Rs. ${p.price}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deleteProduct('${p.id || p._id}')">
+                                <i class="fa-solid fa-trash"></i> Delete
+                            </button>
+                        </td>
+                    </tr>`;
+            });
+        } catch (error) {
+            console.error("Fetch Error:", error);
+            document.getElementById("adminTableBody").innerHTML = 
+                `<tr><td colspan="5" style="text-align:center; color:red; font-weight:bold;">Error reaching server! Is your Render app awake?</td></tr>`;
         }
     }
 
+    // Fixed submission handler with fixed syntax
+    async function submitProduct() {
+        const title = document.getElementById("prodTitle").value.trim();
+        const price = document.getElementById("prodPrice").value.trim();
+        const category = document.getElementById("prodCategory").value;
+        const icon = document.getElementById("prodIcon").value;
+
+        if (!title || !price) {
+            alert("Please fill out both Title and Price elements before processing.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/products`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ title, price, category, icon })
+            });
+
+            if (response.ok) {
+                // Reset input fields
+                document.getElementById("prodTitle").value = '';
+                document.getElementById("prodPrice").value = '';
+                loadAdminPanel(); // Refresh list automatically
+            } else {
+                alert("Server rejected submission format.");
+            }
+        } catch (error) {
+            console.error("Publish Error:", error);
+            alert("Pipeline execution failed. Web backend could not be reached.");
+        }
+    }
+
+    // Function to delete products safely
+    async function deleteProduct(id) {
+        if (confirm("Confirm removal parameters?")) {
+            try {
+                const response = await fetch(`${BACKEND_URL}/api/products/${id}`, { 
+                    method: 'DELETE' 
+                });
+                
+                if (response.ok) {
+                    loadAdminPanel();
+                } else {
+                    alert("Failed to delete item from database.");
+                }
+            } catch (error) {
+                console.error("Deletion Error:", error);
+            }
+        }
+    }
+
+    // Boot execution
     window.onload = loadAdminPanel;
 </script>
 </body>
