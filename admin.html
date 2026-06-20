@@ -85,7 +85,7 @@
         const price = document.getElementById("prodPrice").value;
         const category = document.getElementById("prodCategory").value;
         const icon = document.getElementById("prodIcon").value;
-await fetch(`${BACKEND_URL}/api/products`, {
+fetch(`${BACKEND_URL}/api/products`, { ... })
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, price, category, icon })
