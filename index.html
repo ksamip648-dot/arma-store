@@ -16,7 +16,7 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--light-gray); color: var(--text-dark); }
-        .top-bar { background-color: var(--bg-dark-metallic); color: var(--logo-silver); font-size: 12px; padding: 5px 50px; display: flex; justify-content: space-between; align-items: center; }
+        .top-bar { padding: 5px 50px; background-color: var(--bg-dark-metallic); color: var(--logo-silver); font-size: 12px; display: flex; justify-content: space-between; align-items: center; }
         .top-bar-links { display: flex; align-items: center; gap: 15px; }
         .top-bar a { color: var(--logo-silver); text-decoration: none; transition: color 0.2s; }
         .top-bar a:hover { color: var(--white); }
@@ -57,6 +57,24 @@
         .close-btn { position: absolute; top: 10px; right: 15px; cursor: pointer; font-size: 20px; }
 
         footer { background-color: var(--bg-dark-metallic); color: var(--white); margin-top: 60px; padding: 40px 50px 20px; text-align: center; }
+
+        /* --- MOBILE RESPONSIVE MEDIA QUERIES --- */
+        @media (max-width: 768px) {
+            .top-bar { padding: 8px 15px; flex-direction: column; gap: 8px; text-align: center; }
+            header { padding: 15px; }
+            .header-container { flex-wrap: wrap; gap: 15px; }
+            .logo-area { order: 1; }
+            .header-actions { order: 2; gap: 15px; }
+            .search-container { order: 3; width: 100%; flex-basis: 100%; }
+            .main-container { grid-template-columns: 1fr; margin: 15px auto; padding: 0 15px; gap: 20px; }
+            .sidebar { overflow-x: auto; white-space: nowrap; padding: 15px; }
+            .sidebar h3 { font-size: 16px; margin-bottom: 8px; border-bottom: none; padding-bottom: 0; }
+            .sidebar ul { display: flex; gap: 15px; }
+            .sidebar ul li { padding: 5px 10px; background: var(--light-gray); border-radius: 20px; display: inline-block; }
+            .hero-banner h1 { font-size: 28px; }
+            .modal-content { width: 90%; max-width: 350px; padding: 20px; }
+            footer { padding: 30px 15px 20px; margin-top: 40px; }
+        }
     </style>
 </head>
 <body>
@@ -67,9 +85,8 @@
             <a href="#">Become a Seller</a>
             <a href="#">Customer Care</a>
             <a href="#">Track My Order</a>
-            <!-- AFTER -->
-<a href="https://www.instagram.com/armanepal26?igsh=MXU5MDA4czlxdXZ1cg=="><i class="fa-brands fa-instagram" style="font-size: 18px; vertical-align: middle;"></i></a>
-<a href="C:\Users\dell\OneDrive\Desktop\arma\facebook.html"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/armanepal26?igsh=MXU5MDA4czlxdXZ1cg=="><i class="fa-brands fa-instagram" style="font-size: 18px; vertical-align: middle;"></i></a>
+            <a href="C:\Users\dell\OneDrive\Desktop\arma\facebook.html"><i class="fa-brands fa-facebook-f"></i></a>
          </div>
     </div>
 
@@ -169,7 +186,7 @@
 
     let fullProductsDatabase = [];
     let cartItemsCount = 0;
-       
+        
 
        // FIND THIS FUNCTION:
     async function fetchProductsFromBackend() {
