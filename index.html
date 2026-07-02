@@ -73,24 +73,31 @@
          </div>
     </div>
 
-    <header>
-        <div class="header-container">
-           <div class="logo-area">
-    <img src="logo.png" alt="AŔMA Logo" style="height: 40px; width: auto; object-fit: contain; cursor: pointer;">
-</div>
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search in AŔMA...">
-                <button onclick="searchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
-            </div>
-            <div class="header-actions">
-                <div onclick="openAuthModal()" style="cursor: pointer;"><i class="fa-regular fa-user"></i> <span id="authLabel">Login</span></div>
-                <div class="cart-icon" onclick="toggleCartAlert()">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    <span class="cart-count" id="cartCount">0</span>
-                </div>
+   <header>
+    <div class="header-container">
+        <div class="logo-area">
+            <img src="logo.png" alt="AŔMA Logo" style="height: 40px; width: auto; object-fit: contain; cursor: pointer;">
+        </div>
+        
+        <div class="search-container" style="position: relative; display: flex; flex-grow: 1;">
+            <input type="text" id="searchInput" placeholder="Search in AŔMA..." style="width: 100%; padding-right: 45px;">
+            
+            <button type="button" id="voiceSearchTrigger" onclick="executeVoiceCapture()" title="Voice Search" style="position: absolute; right: 65px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #7f8c8d; cursor: pointer; font-size: 16px; padding: 5px; z-index: 5;">
+                <i class="fa-solid fa-microphone"></i>
+            </button>
+            
+            <button onclick="searchProducts()"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+        
+        <div class="header-actions">
+            <div onclick="openAuthModal()" style="cursor: pointer;"><i class="fa-regular fa-user"></i> <span id="authLabel">Login</span></div>
+            <div class="cart-icon" onclick="toggleCartAlert()">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cartCount">0</span>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
     <div class="modal" id="authModal">
         <div class="modal-content">
