@@ -86,7 +86,7 @@
             <a href="#">Customer Care</a>
             <a href="#">Track My Order</a>
             <a href="https://www.instagram.com/armanepal26?igsh=MXU5MDA4czlxdXZ1cg=="><i class="fa-brands fa-instagram" style="font-size: 18px; vertical-align: middle;"></i></a>
-            <a href="C:\Users\dell\OneDrive\Desktop\arma\facebook.html"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href=""><i class="fa-brands fa-facebook-f"></i></a>
          </div>
     </div>
 
@@ -181,6 +181,55 @@
     </footer>
 
     <script>
+        // Voice Search Capture Logic
+function executeVoiceCapture() {
+    // Check if the browser supports speech recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+        alert("Voice search is not supported by your current browser. Please try Chrome or Safari.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US'; // Supports English queries. Change to 'ne-NP' if you specifically want Nepali text matching.
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    // Visual feedback indicator on click
+    const micBtn = document.getElementById("voiceSearchTrigger");
+    micBtn.style.color = "#ef4444"; // Change icon color to red while recording
+
+    recognition.start();
+
+    // When the browser successfully translates the voice to text
+    recognition.onresult = function(event) {
+        const speechToText = event.results[0][0].transcript;
+        
+        // Remove trailing periods that mobile voice engines sometimes add
+        const cleanQuery = speechToText.replace(/\.$/g, ''); 
+        
+        document.getElementById("searchInput").value = cleanQuery;
+        
+        // Reset mic color back to gray and run your existing search query logic
+        micBtn.style.color = "#7f8c8d";
+        searchProducts();
+    };
+
+    // If the user stops talking or an error occurs
+    recognition.onspeechend = function() {
+        recognition.stop();
+        micBtn.style.color = "#7f8c8d";
+    };
+
+    recognition.onerror = function(event) {
+        micBtn.style.color = "#7f8c8d";
+        console.error("Speech recognition error error context: ", event.error);
+        if(event.error === 'not-allowed') {
+            alert("Microphone access blocked. Please check your browser privacy permissions.");
+        }
+    };
+}
         // 1. ADD THIS LINE (Replace this URL with your actual Render URL later once you get it in Step 2)
     const BACKEND_URL = "https://arma-backend.onrender.com"; 
 
